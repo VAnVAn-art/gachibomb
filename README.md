@@ -1,0 +1,2 @@
+# gachibomb
+My Game😋
