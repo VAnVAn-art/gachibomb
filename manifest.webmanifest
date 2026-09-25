@@ -1,0 +1,84 @@
+{
+  "name": "Gachi Bomb",
+  "short_name": "Gachi Bomb",
+  "id": "com.example.gachi_bomb",
+  "description": "",
+  "orientation": "portrait",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "black",
+  "categories": ["games", "entertainment"],
+  "icons": [{
+        "src": "606f7db693b317ab51f9c924c9d06a4a8b3e54ae5ce2ba737433b0272c261e51-ios-icon-20.png.png",
+        "sizes": "20x20"
+      },{
+        "src": "a3b4a3ee04569075bb809714555be92ed8a6954a647d0ec3b33721ae42f74e6e-ios-icon-29.png.png",
+        "sizes": "29x29"
+      },{
+        "src": "fafbf075c556212cf39a9d029f826cb8025baa643bb2f642185bdd0a487e32ae-android-icon-36.png.png",
+        "sizes": "36x36"
+      },{
+        "src": "adfdbc61f32f06450081113aa5d18b834be332c211a4b26d7f545d52cd2faafb-ios-icon-40.png.png",
+        "sizes": "40x40"
+      },{
+        "src": "66c3194849e9002ada815ab8bf9bf6ed17f01cafffb23e8c3b6499b0d3181d1e-android-icon-48.png.png",
+        "sizes": "48x48"
+      },{
+        "src": "7edede0e4db2759390b76c26f2bac5a6252c23082f346c2ed992eb3c5fb510ac-ios-icon-50.png.png",
+        "sizes": "50x50"
+      },{
+        "src": "f0d4b7233d0e7b3af31784709a60b2acb8eea6593ec9178f3bbd84f395b7f6ce-ios-icon-57.png.png",
+        "sizes": "57x57"
+      },{
+        "src": "a3e182d3eeaea8d361a16f7a43139a2b6af2e2439b65160a1c6da2e1280e4513-ios-icon-58.png.png",
+        "sizes": "58x58"
+      },{
+        "src": "e76184731363c9296d47e1d939b0057a2403dba10c39119429c4f83e6b2e08be-ios-icon-60.png.png",
+        "sizes": "60x60"
+      },{
+        "src": "6969ef4990c529ddd89d10591f24cf3d515406f441ec342e1766754aebafd1d2-android-icon-72.png.png",
+        "sizes": "72x72"
+      },{
+        "src": "dffdf6854903ef277317d4954bef1b85317bf3d61a337448cd2e522947f70cde-ios-icon-76.png.png",
+        "sizes": "76x76"
+      },{
+        "src": "14527d0a0303630bc2a752663bc8c278e8d110aeabc35195468b95f03f0a2bb7-ios-icon-80.png.png",
+        "sizes": "80x80"
+      },{
+        "src": "75a04d5d5f7259053f35c9f68885302ccf77c4637b6021c588dbc7b9a63efb3b-ios-icon-87.png.png",
+        "sizes": "87x87"
+      },{
+        "src": "f73ca7143b0467cf70755ee5cd480e9c38612b7bb28e26b8448821cb803bfb42-android-icon-96.png.png",
+        "sizes": "96x96"
+      },{
+        "src": "6db5346cb7dcacf3aa0c57ef019e69253670694929913e57c1073263cb6e23f0-ios-icon-100.png.png",
+        "sizes": "100x100"
+      },{
+        "src": "4dd0c656f505c96109cc8e89f1136159d89c141d3b2a15066f2920602eb45d95-ios-icon-114.png.png",
+        "sizes": "114x114"
+      },{
+        "src": "000eddf5bb05a0769c4a314f3b7d91ce30331fd32f17b28db8826e42603bf8d8-ios-icon-120.png.png",
+        "sizes": "120x120"
+      },{
+        "src": "f999a163ef0104b85e6093bccd87482234d3fad1160e606571b208b0a7d0513b-android-icon-144.png.png",
+        "sizes": "144x144"
+      },{
+        "src": "03fd8d8ae17ee6d20ddd9e93f7fdeb9dc98f5bb40ec7a90de9762713c6172525-ios-icon-152.png.png",
+        "sizes": "152x152"
+      },{
+        "src": "ba9f91aa7734a402914329845c3655680a5187379dc510befe566fe9ee2ab732-ios-icon-167.png.png",
+        "sizes": "167x167"
+      },{
+        "src": "ae4b73d204f9161a6f178878add4257b96a96dbea3f0e86d12c817d43e6d3362-ios-icon-180.png.png",
+        "sizes": "180x180"
+      },{
+        "src": "5b707f0376130303df9cb17b642202a9c4cc3e7312212e26879b8ee8decd06b5-android-icon-192.png.png",
+        "sizes": "192x192"
+      },{
+        "src": "8f84e60b9ec0245dde717b6b27021e4b719f0268bb5821329e03c23137d84336-desktop-icon-512.png.png",
+        "sizes": "512x512"
+      },{
+        "src": "23ae768708d972559b0fa0776a37b99c85025f0c0b6fca042672edf7a1d1cef9-ios-icon-1024.png.png",
+        "sizes": "1024x1024"
+      }]
+}
