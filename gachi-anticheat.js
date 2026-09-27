@@ -105,7 +105,7 @@
 
           // Check session duration vs score
           const durationSec = AntiCheat.getSessionDuration();
-          if (durationSec < 5 && score > 20) {
+          if (durationSec < 5 && score > 50) {
             AntiCheat.triggerViolation('INSTANT_SCORE_INJECTION', `Score ${score} in ${durationSec.toFixed(1)}s`);
             alert('❌ Leaderboard Rejected: Score achieved too quickly.');
             return;
