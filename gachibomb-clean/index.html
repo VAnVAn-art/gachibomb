@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gachi Bomb — 1:1 HTML5 Edition</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/sprites/pers_billy.png">
+</head>
+<body>
+  <!-- Main Arcade Container (Strict 9:16 Portrait Aspect Ratio) -->
+  <div id="game-container">
+    <canvas id="gameCanvas" width="720" height="1280"></canvas>
+
+    <!-- ============================================================
+         1. IN-GAME HUD (1:1 Match with Screenshot 3)
+         ============================================================ -->
+    <div id="hud" class="overlay-screen hud-screen hidden">
+      <!-- Top-Left: Big Yellow Cartoon Score & Light Blue Multiplier -->
+      <div class="hud-score-wrap">
+        <span id="hud-score" class="hud-score-digits">0</span>
+        <span id="hud-mult" class="hud-mult-digits">x4</span>
+      </div>
+
+      <!-- Top-Right: Translucent Hearts Capsule & Yellow Pause Button -->
+      <div class="hud-status-right">
+        <div id="ninja-blade-badge" class="ninja-blade-badge hidden" title="Equipped Katana & Perk">
+          <span id="hud-blade-title" class="hud-blade-title">STEEL KATANA</span>
+          <span id="hud-blade-perk" class="hud-blade-perk">STANDARD</span>
+        </div>
+        <div class="hud-hearts-capsule" id="hud-hearts-box">
+          <img src="assets/sprites/heart_yellow.png" id="heart-0" class="hud-heart-img" alt="Heart">
+          <img src="assets/sprites/heart_yellow.png" id="heart-1" class="hud-heart-img" alt="Heart">
+          <img src="assets/sprites/heart_yellow.png" id="heart-2" class="hud-heart-img" alt="Heart">
+        </div>
+        <div id="ninja-strikes-capsule" class="ninja-strikes-capsule hidden">
+          <span class="ninja-strike-x" id="strike-0">X</span>
+          <span class="ninja-strike-x" id="strike-1">X</span>
+          <span class="ninja-strike-x" id="strike-2">X</span>
+        </div>
+        <button id="btn-hud-pause" class="btn-yellow-pause" title="Pause Game">
+          <img src="assets/sprites/btn_pause_yellow.png" alt="Pause">
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         2. MAIN MENU (1:1 Match with Screenshot 1)
+         ============================================================ -->
+    <div id="menu-overlay" class="overlay-screen menu-screen">
+      <!-- Top Bar: Settings, Leaderboard, and Currency Pills -->
+      <div class="menu-header-bar">
+        <div class="top-nav-left">
+          <button id="btn-open-settings" class="btn-yellow-circle-sm" title="Settings">
+            <img src="assets/sprites/btn_gear.png" alt="Settings">
+          </button>
+          <button id="btn-open-leaderboard" class="btn-yellow-circle-sm" title="Leaderboard">
+            <img src="assets/sprites/btn_chart.png" alt="Leaderboard">
+          </button>
+          <button id="btn-toggle-fs" class="btn-yellow-circle-sm" title="Toggle Fullscreen (F)">
+            <svg id="fs-icon-svg" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#1a1600" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="top-nav-right">
+          <!-- Gold Coin Currency Pill -->
+          <div class="currency-pill gold-pill">
+            <span class="curr-val" id="curr-gold">300</span>
+            <img src="assets/sprites/coin_gold.png" class="curr-icon" alt="Gold">
+          </div>
+          <!-- Cyan Coin Currency Pill -->
+          <div class="currency-pill cyan-pill">
+            <span class="curr-val" id="curr-cyan">50</span>
+            <img src="assets/sprites/coin_cyan.png" class="curr-icon" alt="Cyan">
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Title Logo with Floating Beans -->
+      <div class="menu-title-section">
+        <div class="title-logo-box">
+          <img src="assets/sprites/decor_bean.png" class="floating-bean bean-left" alt="">
+          <img src="assets/sprites/title_logo.png" class="gachi-bomb-logo-img" alt="GACHI Bomb">
+          <img src="assets/sprites/decor_bean.png" class="floating-bean bean-right" alt="">
+        </div>
+      </div>
+
+      <!-- Game Mode Selector: Classic Catch vs Gachi Ninja -->
+      <div class="menu-mode-switcher">
+        <button id="btn-mode-classic" class="mode-toggle-btn active" title="Classic Catch Mode">CLASSIC</button>
+        <button id="btn-mode-ninja" class="mode-toggle-btn" title="Blade Slicing Fruit Ninja Mode">GACHI NINJA</button>
+      </div>
+
+      <!-- Center Action Buttons: Big Yellow Play & Yellow Shopping Basket -->
+      <div class="menu-center-buttons">
+        <button id="btn-main-play" class="btn-yellow-circle-lg" title="Start Game">
+          <img src="assets/sprites/btn_play.png" alt="PLAY">
+        </button>
+        <button id="btn-open-shop" class="btn-yellow-circle-lg" title="Character Upgrades & Shop">
+          <img src="assets/sprites/btn_basket.png" alt="SHOP">
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         3. CHARACTER UPGRADES & SHOP SCREEN (1:1 Match with Author Screenshots)
+         ============================================================ -->
+    <div id="shop-overlay" class="overlay-screen shop-screen hidden">
+      <!-- Top Currency Pills & Back Button -->
+      <div class="shop-header-bar">
+        <button id="btn-shop-back" class="btn-card-refresh btn-shop-back-top" title="Back to Menu">
+          <img src="assets/sprites/btn-try-again-normal.png" alt="Back">
+        </button>
+        <div class="top-nav-right">
+          <div class="currency-pill cyan-pill">
+            <span class="curr-val" id="shop-curr-cyan">50</span>
+            <img src="assets/sprites/coin_cyan.png" class="curr-icon" alt="Cyan">
+          </div>
+          <div class="currency-pill gold-pill">
+            <span class="curr-val" id="shop-curr-gold">300</span>
+            <img src="assets/sprites/coin_gold.png" class="curr-icon" alt="Gold">
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 1: Character Selection & Multipliers (Default) -->
+      <div id="tab-view-character" class="shop-tab-view">
+        <div class="char-main-card">
+          <!-- Top Card Navigation: Back Button, Armory Mode Toggle, and Price Pill -->
+          <div class="card-top-nav-bar">
+            <button id="btn-char-back" class="btn-card-refresh btn-card-nav-back" title="Back to Main Menu">
+              <img src="assets/sprites/btn-try-again-normal.png" alt="Back">
+            </button>
+
+            <div class="shop-armory-toggle-row">
+              <button id="btn-armory-chars" class="armory-subtab-btn active" title="Fighter Characters">FIGHTERS</button>
+              <button id="btn-armory-blades" class="armory-subtab-btn" title="Ninja Blades">BLADES</button>
+            </div>
+
+            <div id="card-char-price-tag" class="card-price-pill">
+              <span id="card-char-price-val">0</span>
+              <img src="assets/sprites/btn_basket.png" class="inline-price-icon" alt="Price">
+            </div>
+          </div>
+
+          <!-- Character Name & Multiplier Capsule -->
+          <div class="card-char-header">
+            <div id="card-char-name" class="card-char-title">Billy</div>
+            <div id="card-char-mult" class="card-char-mult-pill" title="Click to Upgrade Multiplier">X1</div>
+          </div>
+
+          <!-- Big Cutout Photo of Character or Katana Blade -->
+          <div class="card-char-photo-wrap">
+            <img id="card-char-photo" src="assets/sprites/pers_billy.png" alt="Fighter Photo">
+            <div id="card-blade-preview" class="card-blade-preview hidden">
+              <svg id="blade-svg" class="blade-svg" viewBox="0 0 200 400" width="180" height="300">
+                <defs>
+                  <linearGradient id="bladeSteelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7a8291" id="blade-stop-back" />
+                    <stop offset="35%" stop-color="#d6dde6" id="blade-stop-mid" />
+                    <stop offset="85%" stop-color="#ffffff" id="blade-stop-ridge" />
+                    <stop offset="100%" stop-color="#9aa3b2" id="blade-stop-edge" />
+                  </linearGradient>
+                  <linearGradient id="bladeHamonGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.6" />
+                  </linearGradient>
+                  <linearGradient id="habakiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#e6b845" />
+                    <stop offset="50%" stop-color="#ffd56b" />
+                    <stop offset="100%" stop-color="#a67c17" />
+                  </linearGradient>
+                </defs>
+                <!-- Katana Curved Steel Blade -->
+                <path d="M 98 25 C 103 70, 111 165, 108 252 L 91 252 C 93 165, 96 70, 98 25 Z" 
+                      fill="url(#bladeSteelGrad)" stroke="#667080" stroke-width="1.2" id="blade-path" />
+                <!-- Traditional Hamon (Temper Line) Wave -->
+                <path d="M 99 35 Q 106 80, 102 120 T 106 170 T 103 215 T 105 250" 
+                      stroke="url(#bladeHamonGrad)" stroke-width="1.8" fill="none" id="blade-hamon"/>
+                <!-- Brass Habaki (Blade Collar) -->
+                <polygon points="90,250 109,250 108,260 91,260" fill="url(#habakiGrad)" stroke="#805d0c" stroke-width="1" id="blade-habaki"/>
+                <!-- Blackened Iron Tsuba (Guard) -->
+                <ellipse cx="100" cy="262" rx="28" ry="9" fill="#1b1d22" stroke="#606675" stroke-width="2.5" id="blade-tsuba"/>
+                <ellipse cx="100" cy="262" rx="20" ry="6" fill="none" stroke="#2e333d" stroke-width="1" id="blade-tsuba-inner"/>
+                <!-- Tsuka (Hilt) -->
+                <rect x="91" y="271" width="18" height="85" rx="3" fill="#111317" stroke="#2c303a" stroke-width="1.5" id="blade-hilt"/>
+                <!-- Authentic Diamond Wrap (Tsuka-Ito) -->
+                <polygon points="100,277 106,285 100,293 94,285" fill="#fde82d" id="blade-wrap-1"/>
+                <polygon points="100,295 106,303 100,311 94,303" fill="#fde82d" id="blade-wrap-2"/>
+                <polygon points="100,313 106,321 100,329 94,321" fill="#fde82d" id="blade-wrap-3"/>
+                <polygon points="100,331 106,339 100,347 94,339" fill="#fde82d" id="blade-wrap-4"/>
+                <!-- Kashira (Pommel Cap) -->
+                <rect x="89" y="356" width="22" height="9" rx="3" fill="#20222a" stroke="#606675" stroke-width="1.5" id="blade-pommel"/>
+              </svg>
+              <div id="blade-desc-badge" class="blade-desc-badge">HONED HIGH-CARBON STEEL</div>
+              <div id="blade-perk-badge" class="blade-perk-badge">PERK: BALANCED CUTTING</div>
+            </div>
+          </div>
+
+          <!-- Ownership / Action Status Indicator -->
+          <div id="card-char-status" class="card-char-status-badge equipped">EQUIPPED</div>
+
+          <!-- Bottom In-Card Action Buttons: Capsule with Left Arrow & Right Arrow, plus Basket on Right -->
+          <div class="card-bottom-actions-authentic">
+            <div class="card-arrows-capsule">
+              <button id="btn-char-prev" class="btn-yellow-circle-md flip-arrow" title="Previous Character">
+                <img src="assets/sprites/btn_play.png" alt="Prev">
+              </button>
+              <button id="btn-char-next" class="btn-yellow-circle-md" title="Next Character">
+                <img src="assets/sprites/btn_play.png" alt="Next">
+              </button>
+            </div>
+            <button id="btn-char-basket" class="btn-yellow-circle-lg" title="Equip or Buy Character">
+              <img src="assets/sprites/btn_basket.png" alt="Basket">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Mystery Crate / Case Opening -->
+      <div id="tab-view-cases" class="shop-tab-view hidden">
+        <div class="char-main-card case-card">
+          <button id="btn-cases-back" class="btn-card-refresh" title="Back to Main Menu">
+            <img src="assets/sprites/btn-try-again-normal.png" alt="Back">
+          </button>
+          <div class="tab-header-title">MYSTERY CRATE</div>
+          <div class="case-box-wrap">
+            <img id="case-box-img" src="assets/sprites/crate_box.png" alt="Mystery Crate">
+          </div>
+          <div class="case-cost-tag">
+            PRICE: <span class="gold-num">100</span>
+            <img src="assets/sprites/coin_gold.png" class="inline-curr-icon" alt="Coins">
+          </div>
+          <div id="case-reward-display" class="case-reward-banner">Open crates to win Gold, Diamonds & Characters!</div>
+          <button id="btn-open-crate" class="btn-yellow-pill case-open-btn">OPEN CRATE (100 COINS)</button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Arena Wallpaper Gallery (All 13 Authentic Backgrounds) -->
+      <div id="tab-view-gallery" class="shop-tab-view hidden">
+        <div class="char-main-card gallery-card">
+          <button id="btn-gallery-back" class="btn-card-refresh" title="Back to Main Menu">
+            <img src="assets/sprites/btn-try-again-normal.png" alt="Back">
+          </button>
+          <div class="tab-header-title">ARENA WALLPAPERS (13)</div>
+          <div class="arena-picker-grid">
+            <div class="arena-item active" data-bg="bg_12_main">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_12_main.png" alt="Locker Room"></div>
+              <div class="arena-name">Locker Room</div>
+            </div>
+            <div class="arena-item" data-bg="bg_9_beach">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_9_beach.png" alt="Ocean Beach"></div>
+              <div class="arena-name">Ocean Beach</div>
+            </div>
+            <div class="arena-item" data-bg="bg_1_smaev">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_1_smaev.png" alt="Smaev Gym"></div>
+              <div class="arena-name">Smaev Gym</div>
+            </div>
+            <div class="arena-item" data-bg="bg_2_jungle">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_2_jungle.png" alt="Jungle Arena"></div>
+              <div class="arena-name">Jungle Arena</div>
+            </div>
+            <div class="arena-item" data-bg="bg_3_road">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_3_road.png" alt="Sunset Road"></div>
+              <div class="arena-name">Sunset Road</div>
+            </div>
+            <div class="arena-item" data-bg="bg_11_svetlolikiy">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_11_svetlolikiy.png" alt="Temple"></div>
+              <div class="arena-name">Svetlolikiy Temple</div>
+            </div>
+            <div class="arena-item" data-bg="bg_4_new1">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_4_new1.png" alt="Studio 1"></div>
+              <div class="arena-name">Studio 1</div>
+            </div>
+            <div class="arena-item" data-bg="bg_5_new2">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_5_new2.png" alt="Studio 2"></div>
+              <div class="arena-name">Studio 2</div>
+            </div>
+            <div class="arena-item" data-bg="bg_6_new4">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_6_new4.png" alt="Studio 4"></div>
+              <div class="arena-name">Studio 4</div>
+            </div>
+            <div class="arena-item" data-bg="bg_7_new5">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_7_new5.png" alt="Studio 5"></div>
+              <div class="arena-name">Studio 5</div>
+            </div>
+            <div class="arena-item" data-bg="bg_8_new3">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_8_new3.png" alt="Studio 3"></div>
+              <div class="arena-name">Studio 3</div>
+            </div>
+            <div class="arena-item" data-bg="bg_10_new6">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_10_new6.png" alt="Studio 6"></div>
+              <div class="arena-name">Studio 6</div>
+            </div>
+            <div class="arena-item" data-bg="bg_0_custom">
+              <div class="arena-thumb-box"><img src="assets/sprites/bg_0_custom.png" alt="Custom"></div>
+              <div class="arena-name">Backdrop</div>
+            </div>
+          </div>
+          <button id="btn-equip-arena" class="btn-yellow-pill arena-equip-btn">EQUIP SELECTED ARENA</button>
+        </div>
+      </div>
+
+      <!-- Tab 4: Drop & Bomb Color Effects (1:1 with Screenshot media_1790607375096.png) -->
+      <div id="tab-view-drops" class="shop-tab-view hidden">
+        <div class="char-main-card effects-card">
+          <!-- Top Left Back to Menu Button -->
+          <button id="btn-effects-back" class="btn-card-refresh" title="Back to Main Menu">
+            <img src="assets/sprites/btn-try-again-normal.png" alt="Back">
+          </button>
+
+          <!-- Drop Colors Row: 'Дроп' + Creatine Icon + 6 Color Squares -->
+          <div class="effects-row-block">
+            <div class="effects-row-header">
+              <span class="effects-row-title">Дроп</span>
+              <img src="assets/sprites/supp_creatine.png" class="effects-row-icon" alt="Drop Icon">
+            </div>
+            <div class="effects-palette" id="drop-palette">
+              <div class="color-tile active" data-color="#ffffff" style="background:#ffffff;" title="White"></div>
+              <div class="color-tile" data-color="#00bd16" style="background:#00bd16;" title="Green"></div>
+              <div class="color-tile" data-color="#ff0000" style="background:#ff0000;" title="Red"></div>
+              <div class="color-tile" data-color="#3400dd" style="background:#3400dd;" title="Blue"></div>
+              <div class="color-tile" data-color="#000000" style="background:#000000;" title="Black"></div>
+              <div class="color-tile" data-color="#c1d800" style="background:#c1d800;" title="Lime"></div>
+            </div>
+          </div>
+
+          <!-- Bomb Colors Row: 'Бомба' + Bomb Icon + 6 Color Squares -->
+          <div class="effects-row-block">
+            <div class="effects-row-header">
+              <span class="effects-row-title">Бомба</span>
+              <img src="assets/sprites/bomb.png" class="effects-row-icon bomb-icon" alt="Bomb Icon">
+            </div>
+            <div class="effects-palette" id="bomb-palette">
+              <div class="color-tile" data-color="#ffffff" style="background:#ffffff;" title="White"></div>
+              <div class="color-tile" data-color="#00bd16" style="background:#00bd16;" title="Green"></div>
+              <div class="color-tile active" data-color="#ff0000" style="background:#ff0000;" title="Red"></div>
+              <div class="color-tile" data-color="#3400dd" style="background:#3400dd;" title="Blue"></div>
+              <div class="color-tile" data-color="#000000" style="background:#000000;" title="Black"></div>
+              <div class="color-tile" data-color="#c1d800" style="background:#c1d800;" title="Lime"></div>
+            </div>
+          </div>
+
+          <!-- Live Item Preview with Colored Aura (Trenbolone / Creatine / Protein) -->
+          <div class="effects-preview-container">
+            <img id="effects-item-preview" src="assets/sprites/supp_trenbolone.png" alt="Item Preview">
+          </div>
+
+          <!-- Bottom Actions: Pill with < and >, plus Yellow Basket button on Right -->
+          <div class="card-bottom-actions-authentic">
+            <div class="card-arrows-capsule">
+              <button id="btn-effects-prev" class="btn-yellow-circle-md flip-arrow" title="Previous Item">
+                <img src="assets/sprites/btn_play.png" alt="Prev">
+              </button>
+              <button id="btn-effects-next" class="btn-yellow-circle-md" title="Next Item">
+                <img src="assets/sprites/btn_play.png" alt="Next">
+              </button>
+            </div>
+            <button id="btn-effects-save" class="btn-yellow-circle-lg" title="Save Effect Colors">
+              <img src="assets/sprites/btn_basket.png" alt="Save">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom 4 Yellow Circular Buttons (Crate, Male+, Frame, Star) -->
+      <div class="shop-bottom-toolbar">
+        <button id="btn-tool-crate" class="btn-yellow-circle-md" title="Cases">
+          <img src="assets/sprites/btn_cases.png" alt="Cases">
+        </button>
+        <button id="btn-tool-upgrade" class="btn-yellow-circle-md active" title="Characters & Upgrades">
+          <img src="assets/sprites/btn_male_plus.png" alt="Upgrades">
+        </button>
+        <button id="btn-tool-gallery" class="btn-yellow-circle-md" title="Wallpapers">
+          <img src="assets/sprites/btn_gallery.png" alt="Gallery">
+        </button>
+        <button id="btn-tool-drop" class="btn-yellow-circle-md" title="Drops">
+          <img src="assets/sprites/btn_star_drop.png" alt="Drops">
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         4. PAUSE MENU (Authentic Yellow Theme)
+         ============================================================ -->
+    <div id="pause-overlay" class="overlay-screen pause-screen hidden">
+      <div class="modal-dialog-card">
+        <div class="modal-dialog-title">GAME PAUSED</div>
+        <div id="pause-score-display" class="modal-big-score">0</div>
+
+        <div class="modal-btn-row">
+          <button id="btn-pause-restart" class="btn-yellow-circle-md" title="Restart">
+            <img src="assets/sprites/btn-try-again-normal.png" alt="Restart">
+          </button>
+          <button id="btn-pause-resume" class="btn-yellow-circle-lg" title="Resume">
+            <img src="assets/sprites/btn_play.png" alt="Resume">
+          </button>
+          <button id="btn-pause-menu" class="btn-yellow-circle-md" title="Main Menu">
+            <img src="assets/sprites/btn-main-menu-normal.png" alt="Menu">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         5. GAME OVER & OFFICIAL LEADERBOARD SUBMIT
+         ============================================================ -->
+    <div id="gameover-overlay" class="overlay-screen gameover-screen hidden">
+      <div class="modal-dialog-card gameover-card">
+        <div class="modal-dialog-title red-title">GAME OVER</div>
+
+        <div class="gameover-avatar-wrap">
+          <img id="gameover-avatar" src="assets/sprites/pers_billy.png" alt="Dead Avatar">
+        </div>
+
+        <div class="gameover-scores-block">
+          <div class="stat-line">SCORE: <span id="final-score" class="score-gold">0</span></div>
+          <div class="stat-line best-line">BEST: <span id="final-best">0</span></div>
+          <div class="stat-line earned-line">+<span id="final-earned-coins">0</span> COINS EARNED</div>
+        </div>
+
+        <!-- Official GDevelop Leaderboard Submit Box -->
+        <div class="leaderboard-submit-form">
+          <input type="text" id="player-name-input" placeholder="YOUR NICKNAME" maxlength="15" autocomplete="off">
+          <button id="btn-submit-score" class="btn-submit-action" title="Submit to Official Leaderboard">
+            <img src="assets/sprites/btn_submit.png" alt="Submit">
+          </button>
+        </div>
+        <div id="submit-status" class="submit-feedback-text"></div>
+
+        <div class="modal-btn-row">
+          <button id="btn-gameover-replay" class="btn-yellow-circle-md" title="Play Again">
+            <img src="assets/sprites/btn-try-again-normal.png" alt="Replay">
+          </button>
+          <button id="btn-gameover-board" class="btn-yellow-circle-md" title="Leaderboard">
+            <img src="assets/sprites/btn_chart.png" alt="Ranks">
+          </button>
+          <button id="btn-gameover-menu" class="btn-yellow-circle-md" title="Main Menu">
+            <img src="assets/sprites/btn-main-menu-normal.png" alt="Menu">
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         6. MULTIPLIER UPGRADE MODAL (Authentic GDevelop score_X)
+         ============================================================ -->
+    <div id="upgrade-modal" class="overlay-screen popup-layer hidden">
+      <div class="modal-dialog-card upgrade-dialog">
+        <div class="modal-dialog-title">MULTIPLIER UPGRADE</div>
+        <div class="upgrade-levels-row">
+          <span id="upgrade-curr-lvl" class="upgrade-lvl-badge">X1</span>
+          <span class="upgrade-arrow-icon">&rarr;</span>
+          <span id="upgrade-next-lvl" class="upgrade-lvl-badge next">X2</span>
+        </div>
+        <div class="upgrade-info-desc">Boosts all score gains and supplement values!</div>
+        <div class="upgrade-cost-tag">
+          COST: <span id="upgrade-cost-amount" class="cyan-num">200</span>
+          <img src="assets/sprites/coin_cyan.png" class="inline-curr-icon" alt="Diamonds">
+        </div>
+        <div id="upgrade-feedback-msg" class="submit-feedback-text"></div>
+        <div class="modal-btn-row">
+          <button id="btn-do-upgrade" class="btn-yellow-pill">UPGRADE NOW</button>
+          <button id="btn-close-upgrade" class="btn-yellow-circle-sm" title="Close">X</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         7. OFFICIAL GDEVELOP FULLSCREEN LEADERBOARD
+         ============================================================ -->
+    <div id="leaderboard-overlay" class="overlay-screen fullscreen-leaderboard-overlay hidden">
+      <iframe id="leaderboard-iframe" src="" frameborder="0"></iframe>
+      <button id="btn-close-board" class="leaderboard-exit-btn" title="Close Leaderboard">X</button>
+    </div>
+
+    <!-- ============================================================
+         7. SETTINGS MODAL
+         ============================================================ -->
+    <div id="settings-overlay" class="overlay-screen popup-layer hidden">
+      <div class="popup-window settings-window">
+        <div class="popup-top">
+          <h2>SETTINGS</h2>
+          <button id="btn-close-settings" class="btn-close-cross">X</button>
+        </div>
+        <div class="settings-body">
+          <div class="setting-row">
+            <label>MUSIC VOLUME</label>
+            <input type="range" id="settings-music" min="0" max="1" step="0.05" value="0.7">
+          </div>
+          <div class="setting-row">
+            <label>SFX VOLUME</label>
+            <input type="range" id="settings-sfx" min="0" max="1" step="0.05" value="0.8">
+          </div>
+          <div class="setting-row">
+            <label>GAME MODE</label>
+            <select id="settings-mode-select" class="gachi-select">
+              <option value="CLASSIC">Classic (1:1 Original Catch)</option>
+              <option value="NINJA">Gachi Ninja (Blade Slicing)</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>ARENA BACKGROUND</label>
+            <select id="settings-bg-select" class="gachi-select">
+              <option value="bg_main">Gym Lockers (Original)</option>
+              <option value="bg_gym">Gym Dungeon</option>
+              <option value="bg_jungle">Jungle Arena</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>DISPLAY MODE</label>
+            <button id="btn-settings-fs" class="btn-yellow-pill btn-setting-fs">TOGGLE FULLSCREEN (F)</button>
+          </div>
+          <div class="setting-row">
+            <label>AUDIO SOURCE</label>
+            <div class="radio-status-tag"><span class="live-dot">●</span> Gachi Radio (gachiradio.com/play)</div>
+          </div>
+        </div>
+        <button id="btn-save-settings" class="btn-yellow-pill">SAVE & CLOSE</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
